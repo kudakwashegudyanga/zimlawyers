@@ -15,12 +15,12 @@ interface DocumentItem {
 }
 
 interface DocumentListProps {
-  onDocumentSelect?: (document: DocumentItem) => void;
+  onSelectDocument?: (document: DocumentItem) => void;
   onCloneTemplate?: (templateId: string) => Promise<void>;
   showCreateButton?: boolean;
 }
 
-export default function DocumentList({ onDocumentSelect, onCloneTemplate, showCreateButton = true }: DocumentListProps) {
+export default function DocumentList({ onSelectDocument, onCloneTemplate, showCreateButton = true }: DocumentListProps) {
   const [privateDocuments, setPrivateDocuments] = useState<DocumentItem[]>([]);
   const [sharedTemplates, setSharedTemplates] = useState<DocumentItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,9 +55,9 @@ export default function DocumentList({ onDocumentSelect, onCloneTemplate, showCr
     }
   };
 
-  const onSelectDocument = (document: DocumentItem) => {
-    if (onDocumentSelect) {
-      onDocumentSelect(document);
+  const handleSelectDocument = (document: DocumentItem) => {
+    if (onSelectDocument) {
+      onSelectDocument(document);
     }
   };
 
@@ -115,7 +115,7 @@ export default function DocumentList({ onDocumentSelect, onCloneTemplate, showCr
                     </div>
                   </div>
                   <button
-                    onClick={() => onSelectDocument(doc)}
+                    onClick={() => handleSelectDocument(doc)}
                     className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                   >
                     <Edit className="w-4 h-4" />

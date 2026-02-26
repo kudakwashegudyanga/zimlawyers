@@ -1,0 +1,12 @@
+services:
+  # Frontend Web Service
+  type: web
+  name: zimlayers-frontend
+  env: node
+  plan: free
+  rootDir: legal-saas-frontend
+  buildCommand: npm install && npm run build
+  startCommand: npm start
+  envVars:
+    - key: NEXT_PUBLIC_API_URL
+      value: https://zimlawyers-3.onrender.com

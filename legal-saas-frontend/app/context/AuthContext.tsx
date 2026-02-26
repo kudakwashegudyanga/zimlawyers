@@ -55,7 +55,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.log('AuthContext - Attempting login with:', email);
       console.log('AuthContext - Password length:', password.length);
       
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      const response = await axios.post(`${API_URL}/api/auth/login`, {
         email,
         password
       });
@@ -81,7 +82,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const register = async (userData: any) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', userData);
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      const response = await axios.post(`${API_URL}/api/auth/register`, userData);
       
       const { token: newToken, user: newUser } = response.data;
       

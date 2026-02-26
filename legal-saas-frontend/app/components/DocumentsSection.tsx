@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, Plus, Edit, Copy, Search, Filter } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { API_ENDPOINTS } from '../config/api';
 
 interface DocumentItem {
   _id: string;
@@ -40,7 +41,7 @@ export default function DocumentsSection({ onEditDocument }: DocumentsSectionPro
         return;
       }
       
-      const response = await fetch('http://localhost:5000/api/documents/my-documents', {
+      const response = await fetch(API_ENDPOINTS.MY_DOCUMENTS, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -67,7 +68,7 @@ export default function DocumentsSection({ onEditDocument }: DocumentsSectionPro
         return;
       }
       
-      const response = await fetch('http://localhost:5000/api/documents/shared-templates', {
+      const response = await fetch(API_ENDPOINTS.SHARED_TEMPLATES, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -101,7 +102,7 @@ export default function DocumentsSection({ onEditDocument }: DocumentsSectionPro
   const handleCloneTemplate = async (templateId: string) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/documents/clone', {
+      const response = await fetch(API_ENDPOINTS.CLONE_MULTIPLE, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

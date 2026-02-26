@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, Briefcase, Bot, TrendingUp } from 'lucide-react';
 import { DashboardCard } from './DashboardCard';
+import { API_ENDPOINTS } from '../config/api';
 
 interface DashboardStats {
   privateDocuments: number;
@@ -31,13 +32,13 @@ export default function DashboardSection() {
       
       // Fetch all data in parallel
       const [documentsRes, templatesRes, casesRes] = await Promise.all([
-        fetch('http://localhost:5000/api/documents/my-documents', {
+        fetch(API_ENDPOINTS.MY_DOCUMENTS, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch('http://localhost:5000/api/documents/shared-templates', {
+        fetch(API_ENDPOINTS.SHARED_TEMPLATES, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch('http://localhost:5000/api/cases', {
+        fetch(API_ENDPOINTS.CASES, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);

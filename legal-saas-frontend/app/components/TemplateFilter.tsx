@@ -30,7 +30,7 @@ export const TemplateFilter: React.FC<TemplateFilterProps> = ({ onFilterChange }
         const uniqueCategories = [...new Set(
           data.templates
             .map((template: any) => template.category)
-            .filter((cat: any) => cat && cat.trim() !== '')
+            .filter((cat: any): cat is string => cat && cat.trim() !== '')
         )];
         setCategories(uniqueCategories);
       }

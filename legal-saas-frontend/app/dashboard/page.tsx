@@ -9,6 +9,7 @@ import CasesSection from '../components/CasesSection';
 import AssistantSection from '../components/AssistantSection';
 import ProtectedRoute from '../components/ProtectedRoute';
 import NoSSR from '../components/NoSSR';
+import { API_ENDPOINTS } from '../config/api';
 
 interface Document {
   _id: string;
@@ -42,9 +43,9 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchResources = async () => {
       const [documents, templates, cases] = await Promise.all([
-        fetch('http://localhost:5000/api/documents/my-documents', { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch('http://localhost:5000/api/documents/shared-templates', { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch('http://localhost:5000/api/cases', { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch(API_ENDPOINTS.MY_DOCUMENTS, { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch(API_ENDPOINTS.SHARED_TEMPLATES, { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch(API_ENDPOINTS.CASES, { headers: { 'Authorization': `Bearer ${token}` } }),
       ]);
       setDocumentsRes(documents);
       setTemplatesRes(templates);

@@ -21,6 +21,12 @@ export const API_ENDPOINTS = {
   UPDATE_CASE: (id: string) => `${API_URL}/api/cases/${id}`,
   DELETE_CASE: (id: string) => `${API_URL}/api/cases/${id}`,
   
+  // Draft endpoints
+  DRAFTS: `${API_URL}/api/drafts`,
+  GET_DRAFT: (id: string) => `${API_URL}/api/drafts/${id}`,
+  UPDATE_DRAFT: (id: string) => `${API_URL}/api/drafts/${id}`,
+  DELETE_DRAFT: (id: string) => `${API_URL}/api/drafts/${id}`,
+  
   // Template endpoints
   TEMPLATES: `${API_URL}/api/documents/templates`,
   CREATE_TEMPLATE: `${API_URL}/api/documents/templates`,

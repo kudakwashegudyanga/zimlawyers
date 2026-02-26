@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Search, Plus, FileText, Edit } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 
 interface Case {
   _id: string;
@@ -40,7 +41,7 @@ export const CaseList: React.FC<CaseListProps> = ({ onCreateCase, onEditCase }) 
 
   const fetchCases = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/cases', {
+      const response = await fetch(API_ENDPOINTS.CASES, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -67,7 +68,7 @@ export const CaseList: React.FC<CaseListProps> = ({ onCreateCase, onEditCase }) 
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/cases/search?q=${encodeURIComponent(searchQuery)}`, {
+      const response = await fetch(`${API_ENDPOINTS.CASES}/search?q=${encodeURIComponent(searchQuery)}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

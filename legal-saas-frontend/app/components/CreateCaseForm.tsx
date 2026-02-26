@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { X, Save } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 
 interface Case {
   _id: string;
@@ -53,8 +54,8 @@ export const CreateCaseForm: React.FC<CreateCaseFormProps> = ({
     try {
       const token = localStorage.getItem('token');
       const url = editingCase 
-        ? `http://localhost:5000/api/cases/${editingCase._id}`
-        : 'http://localhost:5000/api/cases';
+        ? API_ENDPOINTS.UPDATE_CASE(editingCase._id)
+        : API_ENDPOINTS.CREATE_CASE;
       
       const method = editingCase ? 'PUT' : 'POST';
 

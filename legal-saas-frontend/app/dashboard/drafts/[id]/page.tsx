@@ -6,6 +6,7 @@ import { useAuth } from '../../../context/AuthContext';
 import { ArrowLeft, Save, Edit, Trash2, FileText, Tag, Calendar, User } from 'lucide-react';
 import ProtectedRoute from '../../../components/ProtectedRoute';
 import DashboardSidebar from '../../../components/DashboardSidebar';
+import { API_ENDPOINTS } from '../../../config/api';
 
 interface DraftCase {
   _id: string;
@@ -72,7 +73,7 @@ export default function DraftDetailPage() {
 
   const fetchDraft = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/drafts/${params.id}`, {
+      const response = await fetch(API_ENDPOINTS.GET_DRAFT(params.id as string), {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -104,7 +105,7 @@ export default function DraftDetailPage() {
       if (!draft?._id) {
         throw new Error('No draft ID available');
       }
-      const response = await fetch(`http://localhost:5000/api/drafts/${draft._id}`, {
+      const response = await fetch(API_ENDPOINTS.UPDATE_DRAFT(draft._id), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -136,7 +137,7 @@ export default function DraftDetailPage() {
       if (!draft?._id) {
         throw new Error('No draft ID available');
       }
-      const response = await fetch(`http://localhost:5000/api/drafts/${draft._id}`, {
+      const response = await fetch(API_ENDPOINTS.DELETE_DRAFT(draft._id), {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });

@@ -124,7 +124,7 @@ export default function DocumentsPage() {
                   </div>
                 </div>
                 <button
-                  onClick={handleLogout}
+                  onClick={logout}
                   className="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
                 >
                   <LogOut className="h-5 w-5" />

@@ -11,7 +11,7 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import NoSSR from '../components/NoSSR';
 import { API_ENDPOINTS } from '../config/api';
 
-interface Document {
+interface DocumentItem {
   _id: string;
   title: string;
   content: string;
@@ -33,7 +33,7 @@ export default function DashboardPage() {
   const { user, token } = useAuth();
   const [activePage, setActivePage] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [editingDocument, setEditingDocument] = useState<Document | null>(null);
+  const [editingDocument, setEditingDocument] = useState<DocumentItem | null>(null);
   const [editingCase, setEditingCase] = useState<Case | null>(null);
   const [showCreateCase, setShowCreateCase] = useState(false);
   const [documentsRes, setDocumentsRes] = useState<Response | null>(null);
@@ -54,7 +54,7 @@ export default function DashboardPage() {
     fetchResources();
   }, [token]);
 
-  const handleEditDocument = (document: Document) => {
+  const handleEditDocument = (document: DocumentItem) => {
     setEditingDocument(document);
     // You could open a modal here for editing
   };

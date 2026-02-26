@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import { Save, X } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 
-interface Document {
+interface DocumentData {
   _id: string;
   title: string;
   content: string;
@@ -12,9 +13,9 @@ interface Document {
 }
 
 interface DocumentEditorProps {
-  document: Document | null;
+  document: DocumentData | null;
   onClose: () => void;
-  onSave: (updatedDocument: Document) => void;
+  onSave: (updatedDocument: DocumentData) => void;
 }
 
 export const DocumentEditor: React.FC<DocumentEditorProps> = ({ document, onClose, onSave }) => {
@@ -34,7 +35,7 @@ export const DocumentEditor: React.FC<DocumentEditorProps> = ({ document, onClos
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/documents/${document._id}`, {
+      const response = await fetch(API_ENDPOINTS.UPDATE_DOCUMENT(document._id), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { FileText, Plus, Edit, Copy, Search, Filter } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-interface Document {
+interface DocumentItem {
   _id: string;
   title: string;
   content: string;
@@ -14,13 +14,13 @@ interface Document {
 }
 
 interface DocumentsSectionProps {
-  onEditDocument: (document: Document) => void;
+  onEditDocument: (document: DocumentItem) => void;
 }
 
 export default function DocumentsSection({ onEditDocument }: DocumentsSectionProps) {
   const { token } = useAuth();
-  const [documents, setDocuments] = useState<Document[]>([]);
-  const [templates, setTemplates] = useState<Document[]>([]);
+  const [documents, setDocuments] = useState<DocumentItem[]>([]);
+  const [templates, setTemplates] = useState<DocumentItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');

@@ -1,29 +1,34 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { FileText, Edit, Eye } from 'lucide-react';
+import { FileText, Plus, Search, Filter, Eye, Edit, Trash2, Copy, Globe } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 
-interface Document {
+interface DocumentItem {
   _id: string;
   title: string;
   content: string;
   visibility: string;
   category?: string;
   createdAt: string;
+  updatedAt: string;
 }
 
 interface DocumentListProps {
-  onSelectDocument: (document: Document) => void;
-  onCloneTemplate: (templateId: string) => void;
+  onDocumentSelect?: (document: DocumentItem) => void;
+  onCloneTemplate?: (templateId: string) => Promise<void>;
+  showCreateButton?: boolean;
 }
 
-export const DocumentList: React.FC<DocumentListProps> = ({ onSelectDocument, onCloneTemplate }) => {
-  const { token } = useAuth();
-  const [privateDocuments, setPrivateDocuments] = useState<Document[]>([]);
-  const [sharedTemplates, setSharedTemplates] = useState<Document[]>([]);
+export default function DocumentList({ onDocumentSelect, onCloneTemplate, showCreateButton = true }: DocumentListProps) {
+  const [privateDocuments, setPrivateDocuments] = useState<DocumentItem[]>([]);
+  const [sharedTemplates, setSharedTemplates] = useState<DocumentItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterCategory, setFilterCategory] = useState('');
+  const [showPrivateOnly, setShowPrivateOnly] = useState(false);
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     fetchDocuments();
@@ -34,8 +39,8 @@ export const DocumentList: React.FC<DocumentListProps> = ({ onSelectDocument, on
       const headers = { Authorization: `Bearer ${token}` };
       
       const [privateRes, templatesRes] = await Promise.all([
-        fetch('http://localhost:5000/api/documents/my-documents', { headers }),
-        fetch('http://localhost:5000/api/documents/shared-templates', { headers })
+        fetch(API_ENDPOINTS.MY_DOCUMENTS, { headers }),
+        fetch(API_ENDPOINTS.SHARED_TEMPLATES, { headers })
       ]);
 
       const privateData = await privateRes.json();
@@ -47,6 +52,36 @@ export const DocumentList: React.FC<DocumentListProps> = ({ onSelectDocument, on
       setError('Failed to fetch documents');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const onSelectDocument = (document: DocumentItem) => {
+    if (onDocumentSelect) {
+      onDocumentSelect(document);
+    }
+  };
+
+  const handleCloneTemplate = async (templateId: string) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(API_ENDPOINTS.CLONE_MULTIPLE, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ documentIds: [templateId] })
+      });
+
+      if (response.ok) {
+        // Refresh documents after cloning
+        fetchDocuments();
+        alert('Template cloned successfully!');
+      } else {
+        throw new Error('Failed to clone template');
+      }
+    } catch (err) {
+      alert('Error cloning template');
     }
   };
 
@@ -113,7 +148,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({ onSelectDocument, on
                     </div>
                   </div>
                   <button
-                    onClick={() => onCloneTemplate(template._id)}
+                    onClick={() => onCloneTemplate && onCloneTemplate(template._id)}
                     className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
                   >
                     <Eye className="w-4 h-4" />

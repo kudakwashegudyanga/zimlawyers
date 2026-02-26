@@ -3,13 +3,14 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/navigation';
-import { DocumentList } from '../components/DocumentList';
+import DocumentList from '../components/DocumentList';
 import { DocumentEditor } from '../components/DocumentEditor';
 import { TemplateFilter } from '../components/TemplateFilter';
 import { FileText, LogOut, User, Bot, Menu, X } from 'lucide-react';
 import ProtectedRoute from '../components/ProtectedRoute';
+import { API_ENDPOINTS } from '../config/api';
 
-interface Document {
+interface DocumentItem {
   _id: string;
   title: string;
   content: string;
@@ -20,12 +21,12 @@ interface Document {
 
 export default function DocumentsPage() {
   const { user, logout } = useAuth();
-  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+  const [selectedDocument, setSelectedDocument] = useState<DocumentItem | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useRouter();
 
-  const handleSelectDocument = (document: Document) => {
+  const handleSelectDocument = (document: DocumentItem) => {
     setSelectedDocument(document);
   };
 
@@ -40,7 +41,7 @@ export default function DocumentsPage() {
   const handleCloneTemplate = async (templateId: string) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/documents/clone-multiple', {
+      const response = await fetch(API_ENDPOINTS.CLONE_MULTIPLE, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

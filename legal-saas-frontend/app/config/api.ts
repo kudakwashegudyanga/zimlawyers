@@ -1,6 +1,10 @@
 // Centralized API configuration
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
+// Debug logging to check what URL is being used
+console.log('API_URL being used:', API_URL);
+console.log('NEXT_PUBLIC_API_URL from env:', process.env.NEXT_PUBLIC_API_URL);
+
 export const API_ENDPOINTS = {
   // Auth endpoints
   LOGIN: `${API_URL}/api/auth/login`,

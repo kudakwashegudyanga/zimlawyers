@@ -41,17 +41,35 @@ export default function DashboardPage() {
   const [casesRes, setCasesRes] = useState<Response | null>(null);
 
   useEffect(() => {
+    console.log('Dashboard useEffect - token:', token);
+    console.log('Dashboard useEffect - API_ENDPOINTS.MY_DOCUMENTS:', API_ENDPOINTS.MY_DOCUMENTS);
+    
     const fetchResources = async () => {
-      const [documents, templates, cases] = await Promise.all([
-        fetch(API_ENDPOINTS.MY_DOCUMENTS, { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch(API_ENDPOINTS.SHARED_TEMPLATES, { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch(API_ENDPOINTS.CASES, { headers: { 'Authorization': `Bearer ${token}` } }),
-      ]);
-      setDocumentsRes(documents);
-      setTemplatesRes(templates);
-      setCasesRes(cases);
+      try {
+        console.log('Starting fetch with token:', token ? 'present' : 'missing');
+        const [documents, templates, cases] = await Promise.all([
+          fetch(API_ENDPOINTS.MY_DOCUMENTS, { headers: { 'Authorization': `Bearer ${token}` } }),
+          fetch(API_ENDPOINTS.SHARED_TEMPLATES, { headers: { 'Authorization': `Bearer ${token}` } }),
+          fetch(API_ENDPOINTS.CASES, { headers: { 'Authorization': `Bearer ${token}` } }),
+        ]);
+        
+        console.log('Documents response status:', documents.status);
+        console.log('Templates response status:', templates.status);
+        console.log('Cases response status:', cases.status);
+        
+        setDocumentsRes(documents);
+        setTemplatesRes(templates);
+        setCasesRes(cases);
+      } catch (error) {
+        console.error('Dashboard fetch error:', error);
+      }
     };
-    fetchResources();
+    
+    if (token) {
+      fetchResources();
+    } else {
+      console.log('No token available, skipping fetch');
+    }
   }, [token]);
 
   const handleEditDocument = (document: DocumentItem) => {

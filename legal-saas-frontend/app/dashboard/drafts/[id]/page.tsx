@@ -101,6 +101,9 @@ export default function DraftDetailPage() {
     setError('');
 
     try {
+      if (!draft?._id) {
+        throw new Error('No draft ID available');
+      }
       const response = await fetch(`http://localhost:5000/api/drafts/${draft._id}`, {
         method: 'PUT',
         headers: {
@@ -130,6 +133,9 @@ export default function DraftDetailPage() {
     }
 
     try {
+      if (!draft?._id) {
+        throw new Error('No draft ID available');
+      }
       const response = await fetch(`http://localhost:5000/api/drafts/${draft._id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
@@ -243,13 +249,13 @@ export default function DraftDetailPage() {
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-2xl font-bold text-gray-900">Draft Details</h2>
                     <div className="flex items-center space-x-4">
-                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(draft.status)}`}>
-                        {getStatusIcon(draft.status)}
-                        <span className="ml-2">{draft.status}</span>
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(draft?.status || 'Draft')}`}>
+                        {getStatusIcon(draft?.status || 'Draft')}
+                        <span className="ml-2">{draft?.status || 'Draft'}</span>
                       </span>
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800`}>
                         <Tag className="w-4 h-4 mr-1" />
-                        {draft.category}
+                        {draft?.category || 'Other'}
                       </span>
                     </div>
                   </div>
@@ -260,14 +266,14 @@ export default function DraftDetailPage() {
                       <div className="flex items-center">
                         <User className="w-5 h-5 text-gray-400 mr-2" />
                         <div>
-                          <p className="font-medium text-gray-900">{draft.createdBy.fullName}</p>
-                          <p className="text-sm text-gray-600">{draft.createdBy.email}</p>
+                          <p className="font-medium text-gray-900">{draft?.createdBy?.fullName || 'Unknown'}</p>
+                          <p className="text-sm text-gray-600">{draft?.createdBy?.email || 'Unknown'}</p>
                         </div>
                       </div>
                     </div>
                     <div>
                       <p className="text-sm text-gray-500 mb-2">Last updated</p>
-                      <p className="text-gray-900">{new Date(draft.updatedAt).toLocaleString()}</p>
+                      <p className="text-gray-900">{new Date(draft?.updatedAt || Date.now()).toLocaleString()}</p>
                     </div>
                   </div>
                 </div>

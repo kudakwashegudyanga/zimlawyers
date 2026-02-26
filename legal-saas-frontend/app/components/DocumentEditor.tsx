@@ -4,18 +4,19 @@ import React, { useState } from 'react';
 import { Save, X } from 'lucide-react';
 import { API_ENDPOINTS } from '../config/api';
 
-interface DocumentData {
+interface DocumentItem {
   _id: string;
   title: string;
   content: string;
   visibility: string;
   category?: string;
+  createdAt: string;
 }
 
 interface DocumentEditorProps {
-  document: DocumentData | null;
+  document: DocumentItem | null;
   onClose: () => void;
-  onSave: (updatedDocument: DocumentData) => void;
+  onSave: (updatedDocument: DocumentItem) => void;
 }
 
 export const DocumentEditor: React.FC<DocumentEditorProps> = ({ document, onClose, onSave }) => {
@@ -49,7 +50,12 @@ export const DocumentEditor: React.FC<DocumentEditorProps> = ({ document, onClos
       }
 
       const updatedDoc = await response.json();
-      onSave(updatedDoc.document);
+      const updatedDocument: DocumentItem = {
+        ...document,
+        title: title.trim(),
+        content: content.trim()
+      };
+      onSave(updatedDocument);
       onClose();
     } catch (err: any) {
       setError(err.message || 'Failed to save document');
